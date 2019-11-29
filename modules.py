@@ -5,6 +5,16 @@ from torch.nn import init
 from torch.nn import functional as F
 from torch.distributions import Uniform
 
+class HardSigmoid(nn.Module):
+  def __init__(self, inplace=False):
+    super().__init__()
+    self.inplace = inplace
+
+  def forward(self, x):
+    if self.inplace:
+      return F.hardtanh_(x, min_val=0.0, max_val=1.0)
+    return F.hardtanh(x, min_val=0.0, max_val=1.0)
+
 class SparseLinear(nn.Module):
   def __init__(self, in_features, out_features, beta=2/3, gamma=-0.1, zeta=1.1):
     super().__init__()
